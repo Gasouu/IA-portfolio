@@ -4,15 +4,15 @@ from agent import PortfolioAgent
 st.set_page_config(page_title="Portfolio IA Gaspar", page_icon="🤖")
 
 st.title("💬 Discutez avec le Portfolio de Gaspar")
-st.markdown("Posez-moi des questions sur ces **projets**, ces **compétences** ou ces **expérience** chez COVEA et CPAM17 !")
+st.markdown("Posez-moi des questions sur **ses** projets, **ses** compétences ou **son** expérience chez COVEA et CPAM17 !")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": "Tu es l'assistant virtuel de Gaspar. Réponds de manière professionnelle."}
     ]
 
-agent = PortfolioAgent()
-
+if "agent" not in st.session_state:
+    st.session_state.agent = PortfolioAgent()
 
 for msg in st.session_state.messages:
     if isinstance(msg, dict):
@@ -35,7 +35,7 @@ if prompt := st.chat_input("Ex: Quelles sont tes compétences en Python ?"):
     with st.chat_message("assistant"):
         with st.spinner("Je réfléchis..."):
             try:
-                response_text, updated_history = agent.get_response(st.session_state.messages)
+                response_text, updated_history = st.session_state.agent.get_response(st.session_state.messages)
                 
                 st.markdown(response_text)
                 
